@@ -21,14 +21,14 @@ The priorities supported by journal respond 1:1 to the levels used in [syslog](h
               
 How are these priorities defined? That's hidden in the [sd-daemon documentation](https://www.freedesktop.org/software/systemd/man/sd-daemon.html).
 
->#define SD_EMERG   "<0>"  /* system is unusable */
->#define SD_ALERT   "<1>"  /* action must be taken immediately */
->#define SD_CRIT    "<2>"  /* critical conditions */
->#define SD_ERR     "<3>"  /* error conditions */
->#define SD_WARNING "<4>"  /* warning conditions */
->#define SD_NOTICE  "<5>"  /* normal but significant condition */
->#define SD_INFO    "<6>"  /* informational */
->#define SD_DEBUG   "<7>"  /* debug-level messages */
+>#define SD_EMERG   "<0>"  /* system is unusable */  
+>#define SD_ALERT   "<1>"  /* action must be taken immediately */  
+>#define SD_CRIT    "<2>"  /* critical conditions */  
+>#define SD_ERR     "<3>"  /* error conditions */  
+>#define SD_WARNING "<4>"  /* warning conditions */  
+>#define SD_NOTICE  "<5>"  /* normal but significant condition */  
+>#define SD_INFO    "<6>"  /* informational */  
+>#define SD_DEBUG   "<7>"  /* debug-level messages */  
 
 Armed with that information, it's possible to give priorities to certain log messages by simply adding the matching string to the front of the message. For example if one wants to log info messages it's simply done with: 
 ```rust
