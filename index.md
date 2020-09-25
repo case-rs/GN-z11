@@ -1,37 +1,50 @@
-## Welcome to GitHub Pages
+## logging stdout to journal in Rust
 
-You can use the [editor on GitHub](https://github.com/case-rs/GN-z11/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+Notice: this example is Rust specific, the method can be applied to any language.
+Systemd simplifies logging with journald. A program can simply write to stdout and it will end up in the journal. 
+The ```systemd``` crate offers a journal function to log messages with different levels yet for simplicity I want to use as less crates as possible.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Systemds journal supports different priorities. These respond 1:1 to the levels used in syslog https://linux.die.net/man/3/syslog, as specified in RFC 5424 https://tools.ietf.org/html/rfc5424#section-6.2.1. 
 
-### Markdown
+RFC 5424                  The Syslog Protocol                 March 2009
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
+           Numerical         Severity
+             Code
 
-# Header 1
-## Header 2
-### Header 3
+              0       Emergency: system is unusable
+              1       Alert: action must be taken immediately
+              2       Critical: critical conditions
+              3       Error: error conditions
+              4       Warning: warning conditions
+              5       Notice: normal but significant condition
+              6       Informational: informational messages
+              7       Debug: debug-level messages
+              
+              
+How are these flags defined? That's hidden in the sd-daemon documentation. https://www.freedesktop.org/software/systemd/man/sd-daemon.html
 
-- Bulleted
-- List
+#define SD_EMERG   "<0>"  /* system is unusable */
+#define SD_ALERT   "<1>"  /* action must be taken immediately */
+#define SD_CRIT    "<2>"  /* critical conditions */
+#define SD_ERR     "<3>"  /* error conditions */
+#define SD_WARNING "<4>"  /* warning conditions */
+#define SD_NOTICE  "<5>"  /* normal but significant condition */
+#define SD_INFO    "<6>"  /* informational */
+#define SD_DEBUG   "<7>"  /* debug-level messages */
 
-1. Numbered
-2. List
+Armed with that information, it's possible to give priorities to certain log messages by simply adding the corresponding string to the front of the message. For example if one wants to log info messages it's simply done with 
+```rust
+use std::io::{stdout, Write};
 
-**Bold** and _Italic_ and `Code` text
+fn log_info(message: String) -> io::Result<()> {
+    SD_INFO = String::from("<6>");
+    SD_INFO.push_str(message);
+    stdout().write_all(SD_INFO.as_ref());
 
-[Link](url) and ![Image](src)
+    Ok(())
+}
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Of course, it's also possibel to create a general function that takes the priority level as a parameter.
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/case-rs/GN-z11/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
