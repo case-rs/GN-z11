@@ -37,7 +37,7 @@ use std::io::{stdout, Write};
 fn log_info(message: String) -> io::Result<()> {
     SD_INFO = String::from("<6>");
     SD_INFO.push_str(message);
-    stdout().write_all(SD_INFO.as_ref());
+    stdout().write_all(SD_INFO.as_ref())?;
 
     Ok(())
 }
