@@ -3,7 +3,7 @@
 _Notice:_ this example is Rust specific, the method can be applied to any other programming language.  
 
 Systemd simplifies logging with journald. A program can simply write to stdout and it will end up in the journal. 
-The ```systemd``` [crate](https://crates.io/crates/systemd) offers a journal function to log messages with priorities yet for maintainance reasons I don't want to use unnecessary crates.
+The ```systemd``` [crate](https://crates.io/crates/systemd) offers a journal function to log messages with priorities yet for maintenance  reasons I don't want to use unnecessary crates.
 
 The priorities supported by journal respond 1:1 to the levels used in [syslog](https://linux.die.net/man/3/syslog), as specified in [RFC 5424](https://tools.ietf.org/html/rfc5424#section-6.2.1). 
 
@@ -43,5 +43,5 @@ fn log_info(message: String) -> io::Result<()> {
 }
 ```
 
-Of course, it's also possibel to create a general function that takes the priority level as a parameter.
+Of course, it's also possible to create a general function that takes the priority level as a parameter.
 
